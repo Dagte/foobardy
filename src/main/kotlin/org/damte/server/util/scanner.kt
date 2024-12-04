@@ -1,4 +1,4 @@
-package util
+package org.damte.org.damte.server.util
 
 import java.util.Scanner
 

@@ -1,6 +1,6 @@
-package storage
+package org.damte.org.damte.server
 
-import org.damte.model.DailyEntry
+import org.damte.org.damte.server.model.DailyEntry
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -17,7 +17,6 @@ object StorageManager {
         }
     }
 
-    // Load entries from JSON file
     fun loadEntries(): MutableList<DailyEntry> {
         return try {
             val file = File(FILENAME)

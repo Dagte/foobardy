@@ -1,9 +1,9 @@
 plugins {
     kotlin("jvm") version "2.0.21"
     application
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
+//    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
     kotlin("plugin.serialization") version "2.0.21"
-
+    id("io.ktor.plugin") version "3.0.1"
 }
 
 group = "org.damte"
@@ -16,10 +16,11 @@ repositories {
 dependencies {
 
     // Ktor dependencies
-    implementation("io.ktor:ktor-server-core:2.3.1")
-    implementation("io.ktor:ktor-server-netty:2.3.1")
-    implementation("io.ktor:ktor-server-content-negotiation:2.3.1")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.1")
+    implementation("io.ktor:ktor-server-core:3.0.1")
+    implementation("io.ktor:ktor-server-netty:3.0.1")
+    implementation("io.ktor:ktor-server-content-negotiation:3.0.1")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.1")
+    implementation("io.ktor:ktor-server-config-yaml:3.0.1")
 
     // Exposed dependencies
     implementation("org.jetbrains.exposed:exposed-core:0.41.1")
@@ -40,6 +41,10 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-tests:2.3.1")
 
+}
+
+application {
+    mainClass.set("org.damte.server.ApplicationKt")
 }
 
 tasks.test {

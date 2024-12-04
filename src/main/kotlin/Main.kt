@@ -1,44 +1,50 @@
 package org.damte
 
-import org.damte.model.DailyEntry
-import storage.StorageManager
-import ui.ConsoleUI
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import org.damte.org.damte.server.model.DailyEntry
+import org.damte.org.damte.server.StorageManager
+import org.damte.org.damte.server.ConsoleUI
+import org.damte.org.damte.server.StorageManager.loadEntries
+import org.damte.org.damte.server.StorageManager.saveEntries
 
 fun main() {
-// Load existing entries from storage
-    val entries: MutableList<DailyEntry> = StorageManager.loadEntries()
-
-    // Main application loop
-    loop@ while (true) {
-        when (ConsoleUI.displayMenu()) {
-            "1" -> {
-                val entry = ConsoleUI.collectDailyData()
-
-                // Check if an entry for today already exists
-                if (entries.any { it.date == entry.date }) {
-                    println("\nAn entry for today already exists. Do you want to overwrite it? (y/n)")
-                    when (readLine()?.lowercase()) {
-                        "y", "yes" -> {
-                            entries.removeAll { it.date == entry.date }
-                            entries.add(entry)
-                            StorageManager.saveEntries(entries)
-                            println("Today's data has been updated.")
-                        }
-                        else -> println("No changes made.")
-                    }
-                } else {
-                    entries.add(entry)
-                    StorageManager.saveEntries(entries)
-                    println("Data saved successfully.")
-                }
-            }
-            "2" -> {
-                ConsoleUI.displayEntries(entries)
-            }
-            "3" -> {
-                println("\nThank you for using the Calendar Progress Tracker. Goodbye!")
-                break@loop
-            }
-            else -> println("\nInvalid option. Please select a valid choice.")
+    embeddedServer(Netty, port = 8080) {
+        install(ContentNegotiation) {
+            json()
         }
-    }}
+        routing {
+            get("/") {
+                call.respondText("Hello, world!")
+            }
+
+            route("/entries") {
+                // Get all entries
+                get {
+                    val entries = loadEntries()
+                    call.respond(entries)
+                }
+
+                // Create a new entry
+                post {
+                    try {
+                        val entry = call.receive<DailyEntry>()
+                        val createdEntry = saveEntries(listOf(entry))
+                        call.respond(HttpStatusCode.Created, createdEntry)
+                    } catch (e: Exception) {
+                        call.respond(HttpStatusCode.BadRequest, "Invalid data")
+                    }
+                }
+
+                // Additional routes (GET by ID, PUT, DELETE) can be added here
+            }
+        }
+    }.start(wait = true)
+}

@@ -1,4 +1,4 @@
-package org.damte.model
+package org.damte.org.damte.server.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.datetime.LocalDate

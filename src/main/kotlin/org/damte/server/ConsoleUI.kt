@@ -1,11 +1,9 @@
-package ui
+package org.damte.org.damte.server
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayAt
 import kotlinx.datetime.todayIn
-import org.damte.model.DailyEntry
-import java.time.LocalDate
+import org.damte.org.damte.server.model.DailyEntry
 
 object ConsoleUI {
     // Display the main menu and return the user's choice
