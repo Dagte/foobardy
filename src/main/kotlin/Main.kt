@@ -9,11 +9,10 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.damte.org.damte.server.model.DailyEntry
-import org.damte.org.damte.server.StorageManager
-import org.damte.org.damte.server.ConsoleUI
+import org.damte.org.damte.server.StorageManager.addEntries
+import org.damte.org.damte.server.model.request.DailyEntryRequest
 import org.damte.org.damte.server.StorageManager.loadEntries
-import org.damte.org.damte.server.StorageManager.saveEntries
+import org.damte.org.damte.server.util.toDailyEntry
 
 fun main() {
     embeddedServer(Netty, port = 8080) {
@@ -26,17 +25,15 @@ fun main() {
             }
 
             route("/entries") {
-                // Get all entries
                 get {
                     val entries = loadEntries()
                     call.respond(entries)
                 }
 
-                // Create a new entry
                 post {
                     try {
-                        val entry = call.receive<DailyEntry>()
-                        val createdEntry = saveEntries(listOf(entry))
+                        val entry = call.receive<DailyEntryRequest>()
+                        val createdEntry = addEntries(listOf(entry.toDailyEntry()))
                         call.respond(HttpStatusCode.Created, createdEntry)
                     } catch (e: Exception) {
                         call.respond(HttpStatusCode.BadRequest, "Invalid data")
