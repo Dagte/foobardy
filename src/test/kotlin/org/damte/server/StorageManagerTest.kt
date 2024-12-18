@@ -41,7 +41,7 @@ class StorageManagerTest {
             )
         )
 
-        StorageManager.addEntries(entries, testFile.absolutePath)
+        addEntries(entries, testFile.absolutePath)
 
         assertTrue(testFile.exists(), "File should be created")
 
@@ -94,30 +94,4 @@ class StorageManagerTest {
         val expectedJson = json.encodeToString(emptyEntries)
         assertEquals(expectedJson, testFile.readText(), "JSON content should be empty array")
     }
-
-//    @Test
-//    fun `saveEntries handles invalid file path gracefully`() {
-////        val invalidSaver = StoreManager("/invalid_path/test_entries.json")
-//        val entries = listOf(
-//            DailyEntry(
-//                date = LocalDate.parse("2024-11-26"),
-//                mood = "Happy",
-//                sleepHours = 8.0,
-//                breakfast = "Oatmeal with fruits",
-//                lunch = "Grilled chicken sandwich",
-//                dinner = "Spaghetti Bolognese"
-//            )
-//        )
-//
-//        // Capture the printed error message
-//        val originalOut = System.out
-//        val outputStream = java.io.ByteArrayOutputStream()
-//        System.setOut(java.io.PrintStream(outputStream))
-//
-//        invalidSaver.saveEntries(entries)
-//
-//        System.setOut(originalOut)
-//        val output = outputStream.toString().trim()
-//        Assertions.assertTrue(output.startsWith("Error saving entries:"), "Should print error message")
-//    }
 }
