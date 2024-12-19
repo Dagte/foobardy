@@ -34,6 +34,27 @@ object StorageManager {
         }
     }
 
+    fun updateEntry(entry: DailyEntry, filename: String = DEFAULT_FILENAME) {
+        try {
+            val file = File(filename)
+            val existingEntries = getCurrentEntries(file)
+
+            val updatedEntries = existingEntries.map { if (it.date.equals(entry.date)) entry else it }
+            val listWasUpdated = updatedEntries != existingEntries
+
+            if (existingEntries.size == 0 || !listWasUpdated) {
+                existingEntries.add(entry)
+            }
+            val entriesToBeAdded = if (listWasUpdated) updatedEntries else existingEntries
+            val jsonString = Json.encodeToString(entriesToBeAdded)
+
+            file.writeText(jsonString)
+            println("Entry was ${if (listWasUpdated) "updated" else "added"}")
+        } catch (e: Exception) {
+            println("Error saving entries: ${e.message}")
+        }
+    }
+
     fun loadEntries(): MutableList<DailyEntry> {
         return try {
             getCurrentEntries(File(DEFAULT_FILENAME))

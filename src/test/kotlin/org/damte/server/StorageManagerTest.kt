@@ -10,6 +10,7 @@ import org.damte.org.damte.server.model.DailyEntry
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.damte.org.damte.server.StorageManager.saveEntries
+import org.damte.org.damte.server.StorageManager.updateEntry
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -90,8 +91,76 @@ class StorageManagerTest {
         val emptyEntries = emptyList<DailyEntry>()
        saveEntries(emptyEntries)
 
-        assertTrue(testFile.exists(), "File should be created even with empty list")
-        val expectedJson = json.encodeToString(emptyEntries)
-        assertEquals(expectedJson, testFile.readText(), "JSON content should be empty array")
+        addEntries(emptyEntries, testFile.absolutePath)
+
+        assertTrue(testFile.exists(), "File should be created")
+
+        val expectedJson = json.encodeToString<List<DailyEntry>>(emptyEntries)
+        assertEquals(expectedJson, testFile.readText(), "JSON content should match")
+    }
+
+//    @Test
+//    fun `updateEntry when second entry has same date`() {
+//        val entries = listOf(
+//            DailyEntry(
+//                date = LocalDate(2024, 11, 26),
+//                mood = "Ecstatic",
+//                sleepHours = 4.0,
+//                breakfast = "Omelette",
+//                lunch = "Chicken a la caserole",
+//                dinner = "Tuna"
+//            )
+//        )
+//        addEntries(entries, testFile.absolutePath)
+//
+//        updateEntry(entries, testFile.absolutePath)
+//
+//        assertTrue(testFile.exists(), "File should be created")
+//
+//        val expectedJson = json.encodeToString<List<DailyEntry>>(entries)
+//        assertEquals(expectedJson, testFile.readText(), "JSON content should match")
+//    }
+
+    @Test
+    fun `updateEntry updates existing entry`() {
+        val entry = DailyEntry(
+            date = LocalDate(2024, 11, 26),
+            mood = "Ecstatic",
+            sleepHours = 4.0,
+            breakfast = "Omelette",
+            lunch = "Chicken a la caserole",
+            dinner = "Tuna"
+        )
+        addEntries(listOf(entry), testFile.absolutePath)
+
+        updateEntry(entry.copy(dinner = "Gazpacho"), testFile.absolutePath)
+
+        val entries = json.decodeFromString<List<DailyEntry>>(testFile.readText())
+        assertEquals(1, entries.size)
+        assertEquals("Gazpacho", entries[0].dinner)
+    }
+
+    @Test
+    fun `updateEntry adds new entry if date not found`() {
+        val today = LocalDate(2024, 11, 26)
+        val entry = DailyEntry(
+            date = today,
+            mood = "Excited",
+            sleepHours = 6.5,
+            breakfast = "Pancakes",
+            lunch = "Burger",
+            dinner = "Pizza"
+        )
+
+        addEntries(listOf(entry), testFile.absolutePath)
+        val yesterday = LocalDate(2024, 11, 25)
+        val newEntry = entry.copy(date = yesterday)
+
+        updateEntry (newEntry, testFile.absolutePath)
+
+        val entries = json.decodeFromString<List<DailyEntry>>(testFile.readText())
+        assertEquals(2, entries.size)
+        assertEquals(today, entries[0].date)
+        assertEquals(yesterday, entries[1].date)
     }
 }
