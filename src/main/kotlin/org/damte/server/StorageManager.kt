@@ -5,21 +5,20 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 
-object StorageManager {
-    private const val DEFAULT_FILENAME = "entries.json"
+class StorageManager(private val filename: String = "entries.json") {
     private val json = Json { prettyPrint = true }
 
 
     fun saveEntries(entries: List<DailyEntry>) {
         try {
             val jsonString = Json.encodeToString(entries)
-            File(DEFAULT_FILENAME).writeText(jsonString)
+            File(filename).writeText(jsonString)
         } catch (e: Exception) {
             println("Error saving entries: ${e.message}")
         }
     }
 
-    fun addEntries(entries: List<DailyEntry>, filename: String = DEFAULT_FILENAME) {
+    fun addEntries(entries: List<DailyEntry>) {
         try {
             val file = File(filename)
             val existingEntries = getCurrentEntries(file)
@@ -34,15 +33,15 @@ object StorageManager {
         }
     }
 
-    fun updateEntry(entry: DailyEntry, filename: String = DEFAULT_FILENAME) {
+    fun updateEntry(entry: DailyEntry) {
         try {
             val file = File(filename)
             val existingEntries = getCurrentEntries(file)
 
-            val updatedEntries = existingEntries.map { if (it.date.equals(entry.date)) entry else it }
+            val updatedEntries = existingEntries.map { if (it.date == entry.date) entry else it }
             val listWasUpdated = updatedEntries != existingEntries
 
-            if (existingEntries.size == 0 || !listWasUpdated) {
+            if (existingEntries.isEmpty() || !listWasUpdated) {
                 existingEntries.add(entry)
             }
             val entriesToBeAdded = if (listWasUpdated) updatedEntries else existingEntries
@@ -57,7 +56,7 @@ object StorageManager {
 
     fun loadEntries(): MutableList<DailyEntry> {
         return try {
-            getCurrentEntries(File(DEFAULT_FILENAME))
+            getCurrentEntries(File(filename))
         } catch (e: Exception) {
             println("Error loading entries: ${e.message}")
             mutableListOf()

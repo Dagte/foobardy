@@ -22,6 +22,10 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.1")
     implementation("io.ktor:ktor-server-config-yaml:3.0.1")
 
+    // Koin for Ktor
+    implementation("io.insert-koin:koin-ktor:4.1.0-Beta1")
+    implementation("io.insert-koin:koin-logger-slf4j:4.1.0-Beta1")
+
     // Exposed dependencies
     implementation("org.jetbrains.exposed:exposed-core:0.41.1")
     implementation("org.jetbrains.exposed:exposed-dao:0.41.1")

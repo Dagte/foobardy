@@ -8,7 +8,9 @@ data class DailyEntry(
     val date: LocalDate,
     val mood: String,
     val sleepHours: Double,
-    val breakfast: String,
-    val lunch: String,
-    val dinner: String
+    val breakfast: List<String>,
+    val lunch: List<String>,
+    val dinner: List<String>,
+    val lactose: Boolean,
+    val gluten: Boolean
 )

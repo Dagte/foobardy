@@ -17,6 +17,8 @@ fun DailyEntryRequest.toDailyEntry(): DailyEntry {
         sleepHours = this.sleepHours,
         breakfast = this.breakfast,
         lunch = this.lunch,
-        dinner = this.dinner
+        dinner = this.dinner,
+        gluten = this.gluten ?: false,
+        lactose = this.lactose ?: false,
     )
 }
