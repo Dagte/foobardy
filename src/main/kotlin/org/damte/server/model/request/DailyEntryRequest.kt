@@ -9,6 +9,6 @@ data class DailyEntryRequest(
     val breakfast: List<String>,
     val lunch: List<String>,
     val dinner: List<String>,
-    val lactose: Boolean?,
-    val gluten: Boolean?
+    val lactose: Boolean? = null,
+    val gluten: Boolean? = null
 )

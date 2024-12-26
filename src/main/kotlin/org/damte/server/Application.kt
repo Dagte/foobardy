@@ -1,9 +1,12 @@
 package org.damte.server
 
 
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.json.Json
 
 import org.damte.org.damte.server.controller.entriesRoutes
 import org.damte.org.damte.server.controller.rootRoutes
@@ -19,8 +22,17 @@ fun Application.module() {
         modules(appModule)
     }
 
+//    install(ContentNegotiation) {
+//        Json {
+//            ignoreUnknownKeys = true
+//        }
+//    }
+    install(ContentNegotiation) {
+        json()
+    }
+
     routing {
-        rootRoutes()
+//        rootRoutes()
         entriesRoutes()
     }
 

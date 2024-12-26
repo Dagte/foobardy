@@ -1,3 +1,6 @@
+val ktor_version = "3.0.1"
+val koin_version = "3.4.0"
+
 plugins {
     kotlin("jvm") version "2.0.21"
     application
@@ -16,15 +19,15 @@ repositories {
 dependencies {
 
     // Ktor dependencies
-    implementation("io.ktor:ktor-server-core:3.0.1")
-    implementation("io.ktor:ktor-server-netty:3.0.1")
-    implementation("io.ktor:ktor-server-content-negotiation:3.0.1")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.1")
-    implementation("io.ktor:ktor-server-config-yaml:3.0.1")
+    implementation("io.ktor:ktor-server-core:${ktor_version}")
+    implementation("io.ktor:ktor-server-netty:${ktor_version}")
+    implementation("io.ktor:ktor-server-content-negotiation:${ktor_version}")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:${ktor_version}")
+    implementation("io.ktor:ktor-server-config-yaml:${ktor_version}")
 
     // Koin for Ktor
-    implementation("io.insert-koin:koin-ktor:4.1.0-Beta1")
-    implementation("io.insert-koin:koin-logger-slf4j:4.1.0-Beta1")
+    implementation("io.insert-koin:koin-ktor:${koin_version}")
+    implementation("io.insert-koin:koin-logger-slf4j:${koin_version}")
 
     // Exposed dependencies
     implementation("org.jetbrains.exposed:exposed-core:0.41.1")
@@ -40,6 +43,7 @@ dependencies {
     // Other
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm")
 
     // Testing
     testImplementation(kotlin("test"))
