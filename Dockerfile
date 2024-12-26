@@ -2,11 +2,16 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
-# Build the application
-RUN ./gradlew build
+# Copy Gradle wrapper files
+COPY gradlew gradlew
+COPY gradle gradle
 
-COPY build/libs/*.jar app.jar
+# Copy your project files
+COPY . .
+
+# Build the project
+RUN ./gradlew buildFatJar -x test --stacktrace
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/app/app.jar"]
+CMD ["java", "-jar", "/app/build/libs/fat.jar"]

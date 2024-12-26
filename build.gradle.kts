@@ -9,6 +9,16 @@ plugins {
     id("io.ktor.plugin") version "3.0.1"
 }
 
+application {
+    mainClass.set("org.damte.server.ApplicationKt")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("fat.jar")
+    }
+}
+
 group = "org.damte"
 version = "1.0-SNAPSHOT"
 

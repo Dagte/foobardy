@@ -22,11 +22,6 @@ fun Application.module() {
         modules(appModule)
     }
 
-//    install(ContentNegotiation) {
-//        Json {
-//            ignoreUnknownKeys = true
-//        }
-//    }
     install(ContentNegotiation) {
         json()
     }
