@@ -4,7 +4,6 @@ val koin_version = "3.4.0"
 plugins {
     kotlin("jvm") version "2.0.21"
     application
-//    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
     kotlin("plugin.serialization") version "2.0.21"
     id("io.ktor.plugin") version "3.0.1"
 }
@@ -31,9 +30,13 @@ dependencies {
     // Ktor dependencies
     implementation("io.ktor:ktor-server-core:${ktor_version}")
     implementation("io.ktor:ktor-server-netty:${ktor_version}")
+    implementation("io.ktor:ktor-server-sessions:${ktor_version}") // For session handling
     implementation("io.ktor:ktor-server-content-negotiation:${ktor_version}")
     implementation("io.ktor:ktor-serialization-kotlinx-json:${ktor_version}")
+    implementation("io.ktor:ktor-server-auth:${ktor_version}") // For authentication support
     implementation("io.ktor:ktor-server-config-yaml:${ktor_version}")
+    implementation("io.ktor:ktor-server-status-pages:${ktor_version}")
+
 
     // Koin for Ktor
     implementation("io.insert-koin:koin-ktor:${koin_version}")

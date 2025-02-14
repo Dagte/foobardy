@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import org.damte.org.damte.server.StorageManager
 import org.damte.org.damte.server.model.request.DailyEntryRequest
 import org.damte.org.damte.server.util.toDailyEntry
+import org.damte.server.auth.validateAuthentication
 import org.koin.ktor.ext.inject
 
 fun Route.entriesRoutes() {
@@ -20,11 +21,14 @@ fun Route.entriesRoutes() {
 
     route("/entries") {
         get {
+            validateAuthentication()
+
             val entries = storageManager.loadEntries()
             call.respond(entries)
         }
 
         post {
+            validateAuthentication()
             val bodyText = call.receiveText()
             try {
                 val entry = json.decodeFromString<DailyEntryRequest>(bodyText)
