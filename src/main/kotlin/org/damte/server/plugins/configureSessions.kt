@@ -12,6 +12,7 @@ fun Application.configureSessions() {
     install(Sessions) {
         cookie<Session>("SESSION_ID") {
             cookie.extensions["SameSite"] = "Strict"
+            cookie.maxAgeInSeconds = 3600
         }
     }
 

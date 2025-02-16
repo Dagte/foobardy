@@ -12,7 +12,7 @@ fun Route.authRoutes() {
     route("/login") {
         post {
             val userCredentials = call.receive<UserCredentials>()
-            if (userCredentials.username == "user" && userCredentials.password == "password") {
+            if (AuthService.validateCredentials(userCredentials)) {
                 call.sessions.set(Session(userCredentials.username))
                 call.respond(HttpStatusCode.OK, mapOf("message" to "Login successful"))
             } else {
