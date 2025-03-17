@@ -7,8 +7,10 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.damte.org.damte.server.StorageManager
-import org.damte.org.damte.server.model.request.DailyEntryRequest
+import org.damte.org.damte.server.model.request.DailyEntryCreateRequest
+import org.damte.org.damte.server.model.request.DailyEntryUpdateRequest
 import org.damte.org.damte.server.util.toDailyEntry
+import org.damte.org.damte.server.util.toUpdateDailyEntry
 import org.damte.server.auth.validateAuthentication
 import org.koin.ktor.ext.inject
 
@@ -31,9 +33,22 @@ fun Route.entriesRoutes() {
             validateAuthentication()
             val bodyText = call.receiveText()
             try {
-                val entry = json.decodeFromString<DailyEntryRequest>(bodyText)
+                val entry = json.decodeFromString<DailyEntryCreateRequest>(bodyText)
                 val result = storageManager.updateEntry(entry.toDailyEntry())
                 call.respond(HttpStatusCode.Created, result)
+            } catch (e: SerializationException) {
+                ("Error parsing JSON: ${e.message}")
+                call.respond(HttpStatusCode.BadRequest, "Invalid JSON format")
+            }
+        }
+
+        put {
+            validateAuthentication()
+            val bodyText = call.receiveText()
+            try {
+                val entry = json.decodeFromString<DailyEntryUpdateRequest>(bodyText)
+                val result = storageManager.updateEntry(entry.toUpdateDailyEntry())
+                call.respond(HttpStatusCode.Accepted, result)
             } catch (e: SerializationException) {
                 ("Error parsing JSON: ${e.message}")
                 call.respond(HttpStatusCode.BadRequest, "Invalid JSON format")

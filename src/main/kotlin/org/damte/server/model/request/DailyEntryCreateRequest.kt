@@ -3,7 +3,7 @@ package org.damte.org.damte.server.model.request
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DailyEntryRequest(
+data class DailyEntryCreateRequest(
     val mood: String,
     val sleepHours: Double,
     val breakfast: List<String>,
