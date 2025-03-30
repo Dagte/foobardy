@@ -46,9 +46,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:0.41.1")
     implementation("org.jetbrains.exposed:exposed-dao:0.41.1")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:0.41.1")
 
-    // H2 Database
-    implementation("com.h2database:h2:2.2.220")
+    // SQLite Database
+    implementation("org.xerial:sqlite-jdbc:3.45.1.0")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:1.4.11")
