@@ -9,6 +9,21 @@ import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class DailyEntryResponse(
+    val id: Int,
+    val date: String,
+    val mood: String,
+    val sleepHours: Double
+)
+
+@Serializable
+data class MealSummaryResponse(
+    val type: String,
+    val count: String
+)
 
 fun Route.adminRoutes() {
     route("/admin") {
@@ -17,9 +32,9 @@ fun Route.adminRoutes() {
 
             val stats = transaction {
                 mapOf(
-                    "dailyEntries" to DailyEntries.selectAll().count(),
-                    "meals" to Meals.selectAll().count(),
-                    "knownTables" to listOf(DailyEntries.tableName, Meals.tableName),
+                    "dailyEntries" to DailyEntries.selectAll().count().toString(),
+                    "meals" to Meals.selectAll().count().toString(),
+                    "knownTables" to DailyEntries.tableName + "," + Meals.tableName,
                     "databasePath" to "./data/dailyentries.db"
                 )
             }
@@ -35,11 +50,11 @@ fun Route.adminRoutes() {
                     .orderBy(DailyEntries.date to SortOrder.DESC)
                     .limit(5)
                     .map { row ->
-                        mapOf(
-                            "id" to row[DailyEntries.id],
-                            "date" to row[DailyEntries.date],
-                            "mood" to row[DailyEntries.mood],
-                            "sleepHours" to row[DailyEntries.sleepHours]
+                        DailyEntryResponse(
+                            id = row[DailyEntries.id],
+                            date = row[DailyEntries.date].toString(),
+                            mood = row[DailyEntries.mood].toString(),
+                            sleepHours = row[DailyEntries.sleepHours]
                         )
                     }
             }
@@ -55,9 +70,9 @@ fun Route.adminRoutes() {
                     .selectAll()
                     .groupBy(Meals.mealType)
                     .map { row ->
-                        mapOf(
-                            "type" to row[Meals.mealType],
-                            "count" to row[Meals.foodItem.count()]
+                        MealSummaryResponse(
+                            type = row[Meals.mealType],
+                            count = row[Meals.foodItem.count()].toString()
                         )
                     }
             }

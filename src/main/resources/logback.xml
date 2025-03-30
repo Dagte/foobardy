@@ -1,0 +1,23 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Application Loggers -->
+    <logger name="org.damte" level="DEBUG"/>
+    <logger name="org.damte.server" level="DEBUG"/>
+    <logger name="org.damte.server.di" level="DEBUG"/>
+    
+    <!-- Database Loggers -->
+    <logger name="org.jetbrains.exposed" level="DEBUG"/>
+    <logger name="Exposed" level="DEBUG"/>
+    
+    <!-- Koin Logger -->
+    <logger name="org.koin" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
