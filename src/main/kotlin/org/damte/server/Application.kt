@@ -11,6 +11,7 @@ import org.damte.server.di.appModule
 import org.damte.server.plugins.configureSessions
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
+import org.damte.server.controller.adminRoutes
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
@@ -31,5 +32,6 @@ fun Application.module() {
 
         authRoutes()
         entriesRoutes()
+        adminRoutes()
     }
 }
