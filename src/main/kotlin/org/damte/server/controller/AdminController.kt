@@ -1,5 +1,6 @@
 package org.damte.server.controller
 
+import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.damte.server.auth.validateAuthentication
@@ -10,6 +11,7 @@ import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlinx.serialization.Serializable
+import org.damte.server.database.DataSeeder
 
 @Serializable
 data class DailyEntryResponse(
@@ -77,6 +79,19 @@ fun Route.adminRoutes() {
                     }
             }
             call.respond(mealSummary)
+        }
+
+        post("/db/seed/march2025") {
+            validateAuthentication()
+            try {
+                DataSeeder.seedMarch2025Data()
+                call.respond(HttpStatusCode.Created, "Successfully added March 2025 data")
+            } catch (e: Exception) {
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    mapOf("error" to "Failed to seed data: ${e.message}")
+                )
+            }
         }
     }
 } 
