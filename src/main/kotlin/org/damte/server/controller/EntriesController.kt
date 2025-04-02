@@ -56,8 +56,8 @@ fun Route.entriesRoutes() {
                     return@get
                 }
 
-                val entries = storageManager.loadEntries(queryParams)
-                call.respond(entries)
+                val response = storageManager.loadEntries(queryParams)
+                call.respond(response)
             } catch (e: Exception) {
                 call.respond(
                     HttpStatusCode.InternalServerError,

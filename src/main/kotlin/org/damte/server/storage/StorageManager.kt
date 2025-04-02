@@ -6,6 +6,8 @@ import org.damte.server.database.DailyEntryRepository
 import org.slf4j.LoggerFactory
 import kotlinx.datetime.LocalDate
 import org.damte.server.model.request.EntryQueryParams
+import org.damte.server.model.response.EntriesResponse
+import org.damte.server.model.response.PaginationMetadata
 
 // import kotlinx.serialization.encodeToString
 // import kotlinx.serialization.json.Json
@@ -166,7 +168,7 @@ class StorageManager {
         // }
     }
 
-    fun loadEntries(queryParams: EntryQueryParams): Map<String, Any> {
+    fun loadEntries(queryParams: EntryQueryParams): EntriesResponse {
         return try {
             val (entries, totalCount) = DailyEntryRepository.getEntries(
                 startDate = queryParams.startDate,
@@ -190,24 +192,24 @@ class StorageManager {
                 )
             }
 
-            mapOf(
-                "entries" to dailyEntries,
-                "pagination" to mapOf(
-                    "currentPage" to queryParams.page,
-                    "pageSize" to queryParams.pageSize,
-                    "totalItems" to totalCount,
-                    "totalPages" to kotlin.math.ceil(totalCount.toDouble() / queryParams.pageSize).toInt()
+            EntriesResponse(
+                entries = dailyEntries,
+                pagination = PaginationMetadata(
+                    currentPage = queryParams.page,
+                    pageSize = queryParams.pageSize,
+                    totalItems = totalCount.toInt(),
+                    totalPages = kotlin.math.ceil(totalCount.toDouble() / queryParams.pageSize).toInt()
                 )
             )
         } catch (e: Exception) {
             logger.error("Error loading entries: ${e.message}", e)
-            mapOf(
-                "entries" to emptyList<DailyEntry>(),
-                "pagination" to mapOf(
-                    "currentPage" to 1,
-                    "pageSize" to queryParams.pageSize,
-                    "totalItems" to 0,
-                    "totalPages" to 0
+            EntriesResponse(
+                entries = emptyList(),
+                pagination = PaginationMetadata(
+                    currentPage = 1,
+                    pageSize = queryParams.pageSize,
+                    totalItems = 0,
+                    totalPages = 0
                 )
             )
         }
