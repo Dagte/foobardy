@@ -5,6 +5,8 @@ import org.damte.server.model.dto.UpdateDailyEntry
 import org.damte.server.database.DailyEntryRepository
 import org.slf4j.LoggerFactory
 import kotlinx.datetime.LocalDate
+import org.damte.server.model.request.EntryQueryParams
+
 // import kotlinx.serialization.encodeToString
 // import kotlinx.serialization.json.Json
 // import java.io.File
@@ -164,10 +166,18 @@ class StorageManager {
         // }
     }
 
-    fun loadEntries(): List<DailyEntry> {
+    fun loadEntries(queryParams: EntryQueryParams): Map<String, Any> {
         return try {
-            val entries = DailyEntryRepository.getAllEntries()
-            entries.map { entry ->
+            val (entries, totalCount) = DailyEntryRepository.getEntries(
+                startDate = queryParams.startDate,
+                endDate = queryParams.endDate,
+                page = queryParams.page,
+                pageSize = queryParams.pageSize,
+                sortBy = queryParams.sortBy,
+                sortOrder = queryParams.sortOrder
+            )
+
+            val dailyEntries = entries.map { entry ->
                 DailyEntry(
                     date = LocalDate.parse(entry["date"] as String),
                     mood = entry["mood"] as String,
@@ -179,18 +189,28 @@ class StorageManager {
                     gluten = entry["gluten"] as Boolean
                 )
             }
+
+            mapOf(
+                "entries" to dailyEntries,
+                "pagination" to mapOf(
+                    "currentPage" to queryParams.page,
+                    "pageSize" to queryParams.pageSize,
+                    "totalItems" to totalCount,
+                    "totalPages" to kotlin.math.ceil(totalCount.toDouble() / queryParams.pageSize).toInt()
+                )
+            )
         } catch (e: Exception) {
             logger.error("Error loading entries: ${e.message}", e)
-            emptyList()
+            mapOf(
+                "entries" to emptyList<DailyEntry>(),
+                "pagination" to mapOf(
+                    "currentPage" to 1,
+                    "pageSize" to queryParams.pageSize,
+                    "totalItems" to 0,
+                    "totalPages" to 0
+                )
+            )
         }
-
-        // Old JSON implementation:
-        // try {
-        //     getCurrentEntries(File(filename))
-        // } catch (e: Exception) {
-        //     println("Error loading entries: ${e.message}")
-        //     mutableListOf()
-        // }
     }
 
     // Old JSON helper method:
