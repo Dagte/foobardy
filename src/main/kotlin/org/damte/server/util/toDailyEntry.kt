@@ -1,6 +1,7 @@
 package org.damte.org.damte.server.util
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import org.damte.org.damte.server.model.DailyEntry
@@ -30,7 +31,7 @@ fun DailyEntryCreateRequest.toDailyEntry(): DailyEntry {
  */
 fun DailyEntryUpdateRequest.toUpdateDailyEntry(): UpdateDailyEntry {
     return UpdateDailyEntry(
-        date = this.date,
+        date = LocalDate.parse(this.date),
         mood = this.mood,
         sleepHours = this.sleepHours,
         breakfast = this.breakfast,

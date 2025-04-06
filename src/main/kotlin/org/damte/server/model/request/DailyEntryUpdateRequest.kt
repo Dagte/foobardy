@@ -1,11 +1,10 @@
 package org.damte.org.damte.server.model.request
 
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class DailyEntryUpdateRequest(
-    val date: LocalDate,
+    val date: String,
     val mood: String? = null,
     val sleepHours: Double? = null,
     val breakfast: List<String>? = null,

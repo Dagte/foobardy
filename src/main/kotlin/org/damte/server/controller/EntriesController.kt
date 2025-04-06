@@ -15,9 +15,12 @@ import org.damte.org.damte.server.util.toUpdateDailyEntry
 import org.damte.server.auth.validateAuthentication
 import org.damte.server.model.request.EntryQueryParams
 import org.koin.ktor.ext.inject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 fun Route.entriesRoutes() {
     val storageManager by inject<StorageManager>()
+    val logger: Logger = LoggerFactory.getLogger("Routes.entries")
     val json = Json {
         ignoreUnknownKeys = true
     }
@@ -87,7 +90,7 @@ fun Route.entriesRoutes() {
                 val result = storageManager.updateEntry(entry.toUpdateDailyEntry())
                 call.respond(HttpStatusCode.Accepted, result)
             } catch (e: SerializationException) {
-                ("Error parsing JSON: ${e.message}")
+                logger.warn("Error parsing JSON: ${e.message}")
                 call.respond(HttpStatusCode.BadRequest, "Invalid JSON format")
             }
         }
