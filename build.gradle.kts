@@ -51,6 +51,10 @@ dependencies {
     // PostgreSQL Database
     implementation("org.postgresql:postgresql:42.7.1")
 
+    // Excel handling
+    implementation("org.apache.poi:poi:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
+
     // Logging
     implementation("ch.qos.logback:logback-classic:1.4.11")
 

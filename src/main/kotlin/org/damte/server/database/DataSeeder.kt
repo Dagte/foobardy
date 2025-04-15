@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory
 object DataSeeder {
     private val logger = LoggerFactory.getLogger(DataSeeder::class.java)
 
-    fun seedMarch2025Data() {
+    fun seedApril2025Data() {
         val entries = listOf(
             DailyEntry(
-                date = LocalDate(2025, 3, 23),
+                date = LocalDate(2025, 4, 1),
                 mood = "Good",
                 sleepHours = 7.5,
                 breakfast = listOf("Oatmeal", "Banana", "Coffee"),
@@ -20,7 +20,7 @@ object DataSeeder {
                 gluten = false
             ),
             DailyEntry(
-                date = LocalDate(2025, 3, 24),
+                date = LocalDate(2025, 4, 2),
                 mood = "Great",
                 sleepHours = 8.0,
                 breakfast = listOf("Yogurt", "Granola", "Fruit"),
@@ -30,7 +30,7 @@ object DataSeeder {
                 gluten = true
             ),
             DailyEntry(
-                date = LocalDate(2025, 3, 25),
+                date = LocalDate(2025, 4, 3),
                 mood = "Okay",
                 sleepHours = 6.5,
                 breakfast = listOf("Toast", "Eggs", "Tea"),
@@ -40,7 +40,7 @@ object DataSeeder {
                 gluten = true
             ),
             DailyEntry(
-                date = LocalDate(2025, 3, 26),
+                date = LocalDate(2025, 4, 4),
                 mood = "Good",
                 sleepHours = 7.0,
                 breakfast = listOf("Smoothie", "Toast"),
@@ -50,7 +50,7 @@ object DataSeeder {
                 gluten = false
             ),
             DailyEntry(
-                date = LocalDate(2025, 3, 27),
+                date = LocalDate(2025, 4, 5),
                 mood = "Excellent",
                 sleepHours = 8.5,
                 breakfast = listOf("Pancakes", "Maple Syrup", "Coffee"),
@@ -60,7 +60,7 @@ object DataSeeder {
                 gluten = true
             ),
             DailyEntry(
-                date = LocalDate(2025, 3, 28),
+                date = LocalDate(2025, 4, 6),
                 mood = "Good",
                 sleepHours = 7.5,
                 breakfast = listOf("Cereal", "Milk", "Fruit"),
@@ -70,7 +70,7 @@ object DataSeeder {
                 gluten = true
             ),
             DailyEntry(
-                date = LocalDate(2025, 3, 29),
+                date = LocalDate(2025, 4, 7),
                 mood = "Great",
                 sleepHours = 8.0,
                 breakfast = listOf("Bagel", "Cream Cheese", "Coffee"),
@@ -94,9 +94,9 @@ object DataSeeder {
                     gluten = entry.gluten
                 )
             }
-            logger.info("Successfully added March 2025 data")
+            logger.info("Successfully added April 2025 data")
         } catch (e: Exception) {
-            logger.error("Error adding March 2025 data: ${e.message}", e)
+            logger.error("Error adding April 2025 data: ${e.message}", e)
             throw e
         }
     }

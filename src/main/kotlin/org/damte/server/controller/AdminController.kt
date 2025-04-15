@@ -81,11 +81,11 @@ fun Route.adminRoutes() {
             call.respond(mealSummary)
         }
 
-        post("/db/seed/march2025") {
+        post("/db/seed/april2025") {
             validateAuthentication()
             try {
-                DataSeeder.seedMarch2025Data()
-                call.respond(HttpStatusCode.Created, "Successfully added March 2025 data")
+                DataSeeder.seedApril2025Data()
+                call.respond(HttpStatusCode.Created, "Successfully added April 2025 data")
             } catch (e: Exception) {
                 call.respond(
                     HttpStatusCode.InternalServerError,

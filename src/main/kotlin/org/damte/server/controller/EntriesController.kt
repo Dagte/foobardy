@@ -14,12 +14,14 @@ import org.damte.org.damte.server.util.toDailyEntry
 import org.damte.org.damte.server.util.toUpdateDailyEntry
 import org.damte.server.auth.validateAuthentication
 import org.damte.server.model.request.EntryQueryParams
+import org.damte.server.service.ExcelService
 import org.koin.ktor.ext.inject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 fun Route.entriesRoutes() {
     val storageManager by inject<StorageManager>()
+    val excelService by inject<ExcelService>()
     val logger: Logger = LoggerFactory.getLogger("Routes.entries")
     val json = Json {
         ignoreUnknownKeys = true
@@ -65,6 +67,29 @@ fun Route.entriesRoutes() {
                 call.respond(
                     HttpStatusCode.InternalServerError,
                     mapOf("error" to "Failed to process request: ${e.message}")
+                )
+            }
+        }
+
+        get("/export/current-month") {
+            validateAuthentication()
+            
+            try {
+                val excelBytes = excelService.generateDailyEntriesExcel()
+                
+                call.response.headers.append(
+                    HttpHeaders.ContentDisposition,
+                    "attachment; filename=daily_entries.xlsx"
+                )
+                call.respondBytes(
+                    bytes = excelBytes,
+                    contentType = ContentType.parse("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                )
+            } catch (e: Exception) {
+                logger.error("Error generating Excel file: ${e.message}", e)
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    mapOf("error" to "Failed to generate Excel file: ${e.message}")
                 )
             }
         }

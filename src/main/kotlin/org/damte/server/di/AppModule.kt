@@ -2,6 +2,7 @@ package org.damte.server.di
 
 import org.damte.org.damte.server.StorageManager
 import org.damte.server.database.DatabaseSetup
+import org.damte.server.service.ExcelService
 import org.koin.dsl.module
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
@@ -15,6 +16,11 @@ val AppModule = module {
     single { 
         logger.info("Creating StorageManager instance")
         StorageManager() 
+    }
+    
+    single { 
+        logger.info("Creating ExcelService instance")
+        ExcelService() 
     }
     
     single(createdAtStart = true) { 
