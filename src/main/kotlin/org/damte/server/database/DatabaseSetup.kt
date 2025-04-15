@@ -17,17 +17,24 @@ class DatabaseSetup {
 
     private fun setupConnection() {
         logger.debug("Setting up database connection")
-        val driverClassName = "org.sqlite.JDBC"
-        val dataDir = File("./data")
         
-        if (!dataDir.exists()) {
-            dataDir.mkdirs()
-            logger.info("Created data directory: ${dataDir.absolutePath}")
-        }
+        val dbHost = System.getenv("DB_HOST") ?: "localhost"
+        val dbPort = System.getenv("DB_PORT") ?: "5432"
+        val dbName = System.getenv("DB_NAME") ?: "damte"
+        val dbUser = System.getenv("DB_USER") ?: "postgres"
+        val dbPassword = System.getenv("DB_PASSWORD") ?: "postgres"
         
-        val jdbcURL = "jdbc:sqlite:./data/dailyentries.db"
-        org.jetbrains.exposed.sql.Database.connect(jdbcURL, driverClassName)
-        logger.info("Database connection established at: $jdbcURL")
+        val jdbcURL = "jdbc:postgresql://$dbHost:$dbPort/$dbName"
+        logger.info("Connecting to database at: $jdbcURL")
+        
+        Database.connect(
+            url = jdbcURL,
+            driver = "org.postgresql.Driver",
+            user = dbUser,
+            password = dbPassword
+        )
+        
+        logger.info("Postgres Database connection established")
     }
 
     private fun createTables() {

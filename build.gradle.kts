@@ -48,8 +48,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:0.41.1")
 
-    // SQLite Database
-    implementation("org.xerial:sqlite-jdbc:3.45.1.0")
+    // PostgreSQL Database
+    implementation("org.postgresql:postgresql:42.7.1")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:1.4.11")
